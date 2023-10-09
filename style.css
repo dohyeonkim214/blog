@@ -1,0 +1,84 @@
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header{
+    text-align: center;
+    padding: 10px;
+    color: white;
+    background-color:bisque;
+}
+
+.title{
+    text-align:center;
+    color:blueviolet;
+}
+
+
+.header div{
+    font-size:40px;
+}
+.menu {
+    background-color: #333;
+}
+
+.menu ol {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.menu a:hover {
+    color: #ff9900; /* 마우스 오버 시 색상 변경 */
+}
+
+.image{
+    width : 150px;
+    height: 150p;
+    border-radius: 50px;
+    margin : 10px auto;
+    display: block;
+}
+.img{
+    margin: 0 auto;
+  
+}
+.intro{
+    color:black;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+
+#CV{
+    background-color:greenyellow;
+}
+
+#CV h1 h2{
+    color:black;
+}
+
+#CV div{
+    color:blue;
+}
+
