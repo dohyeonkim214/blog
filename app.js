@@ -1,20 +1,77 @@
-// 모듈 import
-var http = require('http');
-var fs = require('fs');
+const express = require('express');
+const mysql = require('mysql2');
+const app = express();
+const path = require('path');
 
-// 서버 생성
-var app = http.createServer(function (req, res) {
-    fs.readFile(__dirname + 'index.html', function (err, result) {
-        if(err) {   // 파일읽기가 실패했을 경우
-            console.log('file read fail : ' + err.message);	// error 메세지 콘솔 출력
-        }else { // 파일읽기에 성공했을 경우
-            res.writeHead(200, {'Content-Type':'text/html'});
-            res.end(result);
+// DB 연결 설정
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'abc',
+    password: '1234',
+    database: 'simple_board'
+});
+
+app.use(express.static(__dirname));
+
+connection.connect(err => {
+    if (err) {
+        console.error('Error connecting to MySQL:', err.stack);
+        return;
+    }
+    console.log('Connected to MySQL with ID:', connection.threadId);
+});
+
+// 뷰 엔진 설정
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'board/views'))
+app.use(express.urlencoded({ extended: true }));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/board', (req, res) => {
+    const sql = "SELECT * FROM posts";
+    
+    connection.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching posts:', err);
+            res.status(500).send('Internal Server Error');
+            return;
         }
+        
+        res.render('index', { posts: results });
     });
 });
 
-// 서버의 포트넘버 지정
-app.listen(3000, function () {
-    console.log('Server listening in port number 3000.....');
+app.get('/write', (req, res) => {
+    res.render('write');
 });
+app.post('/write', (req, res) => {
+    // 폼에서 제출된 데이터 가져오기
+    const title = req.body.title;
+    const content = req.body.content;
+
+    // 데이터베이스에 저장하기 위한 쿼리 작성
+    const sql = "INSERT INTO posts (title, content) VALUES (?, ?)";
+    const values = [title, content];
+
+    // 쿼리 실행
+    connection.query(sql, values, (err, result) => {
+        if (err) {
+            console.error('Error inserting post:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        
+        // 게시글 저장 후 게시판 페이지로 리다이렉트
+        res.redirect('/board');
+    });
+});
+// 서버 포트 설정
+app.listen(3000, function () {
+    console.log('Server listening on port 3000...');
+});
+
+
+

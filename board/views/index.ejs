@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <link rel = "stylesheet" href = "/css/index_style.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        h1{
+          font-family:'Times New Roman', Times, serif;
+          display:flex;
+          justify-content:center;
+          text-align: center;
+          background-color:blue;
+        }
+    </style>
+</head>
+<body>
+    <h1>게시판</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>날짜</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- EJS로 게시글 데이터를 반복적으로 표시하는 부분 -->
+            <% posts.forEach(post => { %>
+                <tr>
+                    <td><%= post.id %></td>
+                    <td><a href="/board/<%= post.id %>"><%= post.title %></a></td>
+                    <td><%= post.author %></td>
+                    <td><%= post.date %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    <form action = "/write" method = "GET"> <button type = "submit"> 글쓰기</button> </form>
+</body>
+</html>
